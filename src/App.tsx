@@ -6,13 +6,13 @@ import { IoMdPlayCircle } from "react-icons/io";
 import "./App.css";
 
 function App() {
-  const [recordings, setRecordings] = useState([]);
-  const [isRecording, setIsRecording] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [recordingTime, setRecordingTime] = useState(0);
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const timerRef = useRef(null);
+  const [recordings, setRecordings] = useState<string[]>([]);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [recordingTime, setRecordingTime] = useState<number>(0);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null); 
+  const audioChunksRef = useRef<Blob[]>([]);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const startRecording = async () => {
     setIsRecording(true);
@@ -30,7 +30,7 @@ function App() {
       const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
       const audioUrl = URL.createObjectURL(audioBlob);
       setRecordings((prevRecordings) => [...prevRecordings, audioUrl]);
-      clearInterval(timerRef.current);
+      clearInterval(timerRef.current as NodeJS.Timeout);
     };
 
     mediaRecorderRef.current.start();
@@ -40,20 +40,20 @@ function App() {
   const stopRecording = () => {
     setIsRecording(false);
     setIsPaused(false);
-    mediaRecorderRef.current.stop();
+    mediaRecorderRef.current?.stop();
   };
 
   const pauseRecording = () => {
-    if (mediaRecorderRef.current.state === "recording") {
-      mediaRecorderRef.current.pause();
+    if (mediaRecorderRef.current?.state === "recording") {
+      mediaRecorderRef.current?.pause();
       setIsPaused(true);
-      clearInterval(timerRef.current);
+      clearInterval(timerRef.current as NodeJS.Timeout);
     }
   };
 
   const continueRecording = () => {
-    if (mediaRecorderRef.current.state === "paused") {
-      mediaRecorderRef.current.resume();
+    if (mediaRecorderRef.current?.state === "paused") {
+      mediaRecorderRef.current?.resume();
       setIsPaused(false);
       startTimer();
     }
@@ -110,9 +110,9 @@ function App() {
           </ul>
         </div>
         <div className="bg-[white] px-[10px] py-0 flex justify-between items-center h-[70px]">
-          <span class="relative flex h-3 w-3">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-3 w-3 bg-[#ef4444]"></span>
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ef4444]"></span>
           </span>
 
           <div className="flex items-center gap-[10px]">
