@@ -1,10 +1,8 @@
 import React, { useState, useRef } from "react";
 import { BsSend } from "react-icons/bs";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdMic } from "react-icons/md";
 import { BsPauseCircleFill } from "react-icons/bs";
 import { IoMdPlayCircle } from "react-icons/io";
-import { IoCloseCircle } from "react-icons/io5";
 import "./App.css";
 
 function App() {
@@ -67,15 +65,8 @@ function App() {
     }, 1000);
   };
 
-  const deleteRecording = (id) => {
-    setRecordings((prevRecordings) =>
-      prevRecordings.filter((recording) => recording.id !== id)
-    );
-  };
-
-  const deleteItem = (index) => {
-    const newItems = recordings.filter((_, i) => i !== index);
-    setRecordings(newItems);
+  const deleteRecording = () => {
+    setRecordings([]);
   };
 
   const formatTime = (time) => {
@@ -91,9 +82,19 @@ function App() {
       </h1>
       <div className="w-[380px] h-[450px] border-[2px] border-solid border-[white] rounded-[15px] bg-[#ffffff4a] overflow-hidden">
         <div className="w-full h-[380px] overflow-y-scroll p-[15px] flex justify-start items-end flex-col gap-[20px]">
-          <h3 className="text-sm bg-[white] px-[10px] py-[5px] rounded-[5px]">
-            Recorded Audios:
-          </h3>
+          <div className="w-full flex justify-between items-center">
+            <button
+              onClick={() => {
+                deleteRecording();
+              }}
+              className="bg-[tomato] text-[white] text-sm px-[17px] py-[5px] rounded-[5px]"
+            >
+              Clear All
+            </button>
+            <h3 className="text-sm bg-[white] px-[10px] py-[5px] rounded-[5px]">
+              Recorded Audios:
+            </h3>
+          </div>
           <ul className="flex justify-end items-center flex-col gap-[10px]">
             {recordings.map((audioUrl, index) => (
               <li
@@ -104,9 +105,6 @@ function App() {
                   <source src={audioUrl} type="audio/wav" />
                   Your browser does not support the audio element.
                 </audio>
-                <button onClick={() => deleteItem(index)}>
-                  <IoCloseCircle className="text-[#ef4444]" />
-                </button>
               </li>
             ))}
           </ul>
